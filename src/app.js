@@ -16,7 +16,13 @@ app.get('/articles', (req, res, next) => {
   const knexInstance = req.app.get('db')
   ArticlesService.getAllArticles(knexInstance)
     .then(articles => {
-      res.json(articles)
+      res.json(articles.map(article => ({
+        id: article.id,
+        title: article.title,
+        style: article.style,
+        content: article.content,
+        // date_published: new Date(article.date_published)
+      })))
     })
     .catch(next)
 })
@@ -24,13 +30,19 @@ app.get('/articles', (req, res, next) => {
 app.get('/articles/:article_id', (req, res, next) => {
   const knexInstance = req.app.get('db')
   ArticlesService.getById(knexInstance, req.params.article_id)
-    .then(article => {
-      if (!article) {
+    .then(articles => {
+      if (!articles) {
         return res.status(404).json({
           error: { message: `Article doesn't exist` }
         })
       }
-      res.json(article)
+      res.json({
+        id: articles.id,
+        title: articles.title,
+        style: articles.style,
+        content: articles.content,
+        // date_published: new Date(articles.date_published)
+      })
     })
     .catch(next)
 })
