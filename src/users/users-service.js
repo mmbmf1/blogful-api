@@ -1,5 +1,5 @@
 const UsersService = {
-  getAllUsers(knex) {
+  getAllUsers(knex) {//how does knex work here?
     return knex.select("*").from("blogful_users");
   },
 
